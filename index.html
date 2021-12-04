@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>replit</title>
+    <style>
+      html, body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        display: flex;
+        overflow: hidden;
+      }
+      body, main {
+        background-color: #000;
+      }
+      main {
+        flex-grow: 1;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+      }
+      .spark {
+        border-radius: 50%;
+        position: absolute;
+        pointer-events: none;
+        opacity: 1;
+        transition: transform var(--time) cubic-bezier(0,1,1,1), opacity var(--fadeDur) linear var(--fadeDelay), margin-top var(--time) cubic-bezier(0.5,0,1,1);
+      }
+      .spark.start {
+        transform: translate(var(--horizontal), var(--vertical));
+        opacity: 0;
+        margin-top: var(--fall);
+      }
+      footer {
+        padding: 0.6rem;
+        border-radius: 0.6rem 0 0 0.6rem;
+        background-color: #fff;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      #fullscreen, #share {
+        margin-bottom: 0.2rem;
+      }
+      #reset {
+        margin-top: 0.2rem;
+      }
+      input, label {
+        cursor: pointer;
+      }
+      input.disabled {
+        color: #aaa;
+        border-color: rgba(118, 118, 118, 0.3);
+      }
+      input.disabled, input.disabled+label {
+        cursor: default;
+      }
+      input.disabled+label {
+        color: #aaa;
+      }
+      input[type=number]+label, select+label {
+        float: left;
+        margin-right: 0.2rem;
+      }
+      .indent {
+        margin-left: 0.6rem;
+      }
+      input[type=number] {
+        width: 8ch;
+      }
+      p, input[type=number] {
+        margin: 0.1rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main></main>
+    <footer>
+      <button id="fullscreen">Fullscreen</button>
+      <button id="share">Share</button>
+      <form>
+        <input type="checkbox" id="auto" name="auto" checked>
+        <label for="auto">Auto</label><br>
+        <p>Delay</p>
+        <input type="number" id="delayMin" name="delayMin" value="200">
+        <label for="delayMin" class="indent">Min</label><br>
+        <input type="number" id="delayMax" name="delayMax" value="1000">
+        <label for="delayMax" class="indent">Max</label><br>
+        <select id="randColor" name="randColor">
+          <option value="spark">Spark</option>
+          <option value="firework" selected>Firework</option>
+          <option value="chosen">Chosen</option>
+        </select>
+        <label for="randColor">Color Mode</label><br>
+        <input type="color" id="color" name="color" value="#ff0000" class="disabled indent">
+        <label for="color">Color</label><br>
+        <input type="number" id="brightnessMin" name="brightnessMin" value="100" min="1" max="250" placeholder="0 to 255">
+        <label for="brightnessMin" class="indent">Min Brightness</label><br>
+        <select id="randSize" name="randSize">
+          <option value="spark" selected>Spark</option>
+          <option value="firework">Firework</option>
+        </select>
+        <label for="randSize">Size</label><br>
+        <input type="checkbox" id="sizeGrav" name="sizeGrav" class="indent" checked>
+        <label for="sizeGrav">Size to Gravity</label><br>
+        <input type="number" id="sizeMin" name="sizeMin" value="2">
+        <label for="sizeMin" class="indent">Min</label><br>
+        <input type="number" id="sizeMax" name="sizeMax" value="8">
+        <label for="sizeMax" class="indent">Max</label><br>
+        <p>Spark Distance</p>
+        <input type="number" id="sparkDistMin" name="sparkDistMin" value="0">
+        <label for="sparkDistMin" class="indent">Min</label><br>
+        <input type="number" id="sparkDistMax" name="sparkDistMax" value="100">
+        <label for="sparkDistMax" class="indent">Max</label><br>
+        <p>Firework Distance</p>
+        <input type="number" id="fireworkDistMin" name="fireworkDistMin" value="1">
+        <label for="fireworkDistMin" class="indent">Min</label><br>
+        <input type="number" id="fireworkDistMax" name="fireworkDistMax" value="4">
+        <label for="fireworkDistMax" class="indent">Max</label><br>
+        <p>Sparks</p>
+        <input type="number" id="sparksMin" name="sparksMin" value="40">
+        <label for="sparksMin" class="indent">Min</label><br>
+        <input type="number" id="sparksMax" name="sparksMax" value="80">
+        <label for="sparksMax" class="indent">Max</label><br>
+        <p>Fade</p>
+        <input type="number" id="fadeMin" name="fadeMin" value="1000">
+        <label for="fadeMin" class="indent">Min</label><br>
+        <input type="number" id="fadeMax" name="fadeMax" value="2000">
+        <label for="fadeMax" class="indent">Max</label><br>
+        <input type="number" id="fadeDur" name="fadeDur" value="2000">
+        <label for="fadeDur" class="indent">Duration</label><br>
+        <p>Gravity</p>
+        <input type="number" id="gravityMin" name="gravityMin" value="100">
+        <label for="gravityMin" class="indent">Min</label><br>
+        <input type="number" id="gravityMax" name="gravityMax" value="200">
+        <label for="gravityMax" class="indent">Max</label><br>
+      </form>
+      <button id="reset">Reset</button>
+    </footer>
+    <script>
+
+      /* HTML Element Variables */
+
+      const main = document.getElementsByTagName("main")[0];
+      const footer = document.getElementsByTagName("footer")[0];
+      const fullscreen = document.getElementById("fullscreen");
+      const share = document.getElementById("share");
+      const auto = document.getElementById("auto");
+      let randomInterval;
+      const delayMin = document.getElementById("delayMin");
+      const delayMax = document.getElementById("delayMax");
+      const randColor = document.getElementById("randColor");
+      const brightnessMin = document.getElementById("brightnessMin");
+      const color = document.getElementById("color");
+      const randSize = document.getElementById("randSize");
+      const sizeGrav = document.getElementById("sizeGrav");
+      const sizeMin = document.getElementById("sizeMin");
+      const sizeMax = document.getElementById("sizeMax");
+      const sparkDistMin = document.getElementById("sparkDistMin");
+      const sparkDistMax = document.getElementById("sparkDistMax");
+      const fireworkDistMin = document.getElementById("fireworkDistMin");
+      const fireworkDistMax = document.getElementById("fireworkDistMax");
+      const sparksMin = document.getElementById("sparksMin");
+      const sparksMax = document.getElementById("sparksMax");
+      const fadeMin = document.getElementById("fadeMin");
+      const fadeMax = document.getElementById("fadeMax");
+      const fadeDur = document.getElementById("fadeDur");
+      const gravityMin = document.getElementById("gravityMin");
+      const gravityMax = document.getElementById("gravityMax");
+      const reset = document.getElementById("reset");
+
+
+
+      /* Utility Functions */
+
+      //Random between
+      function random(min, max) {
+        return min === max ? min : Math.random() * (max - min) + parseInt(min);
+      }
+      
+      //Random timing
+      function setRandomInterval(func, minDelay, maxDelay) {
+        let timeout;
+        let running = 1;
+        function runInterval() {
+          function timeoutFunction () {
+            func();
+            runInterval();
+          }
+          timeout = setTimeout(timeoutFunction, random(minDelay, maxDelay));
+        }
+        runInterval();
+        return {
+          clear() {
+            clearTimeout(timeout);
+            running = 0;
+          }, isRunning() {
+            return running;
+          }
+        };
+      }
+
+
+
+      /* Params */
+
+      function updateVals() {
+        const params = new window.URLSearchParams(window.location.search);
+        if (params) {
+          for(const entry of params.entries()) {
+            const el = document.getElementById(entry[0]);
+            if (el) {
+              el.value = entry[1];
+            }
+          }
+          if (!params.has("auto")) {
+            auto.checked = false;
+            if (randomInterval) {
+              randomInterval.clear();
+            }
+            delayMin.classList.add("disabled");
+            delayMax.classList.add("disabled");
+          } else {
+            auto.checked = true;
+            if (!randomInterval || !randomInterval.isRunning()) {
+              randomInterval = setRandomInterval(randFirework, delayMin.value, delayMax.value);
+            }
+            delayMin.classList.remove("disabled");
+            delayMax.classList.remove("disabled");
+          }
+          if (params.get("randColor") === "chosen") {
+            color.classList.remove("disabled");
+            brightnessMin.classList.add("disabled");
+          } else {
+            color.classList.add("disabled");
+            brightnessMin.classList.remove("disabled");
+          }
+          if (params.get("randSize") == "firework") {
+            sizeGrav.classList.add("disabled");
+          } else {
+            sizeGrav.classList.remove("disabled");
+          }
+          sizeGrav.checked = params.has("sizeGrav");
+        }
+      }
+
+      window.addEventListener("popstate", function (e) {
+        updateVals();
+      });
+
+      function getCurrentParams() {
+        const params = Array.from(new FormData(document.getElementsByTagName("form")[0]).entries());
+        let string = "?";
+        for (let i = 0; i < params.length; i++) {
+          string += params[i][0] + "=" + params[i][1].replace("#", "%23") + "&";
+        }
+        return string.substring(0, string.length - 1);
+      }
+
+      function updateParams() {
+        history.pushState(null, "Fireworks", getCurrentParams());
+      }
+
+      const params = new window.URLSearchParams(window.location.search);
+      if (Array.from(params).length) {
+        updateVals();
+      } else {
+        randomInterval = setRandomInterval(randFirework, delayMin.value, delayMax.value);
+        updateParams();
+      }
+
+
+
+
+      /* Firework Functions */
+
+      /*function genColorThird() {
+        return ("0"+(((Math.random()*(1 - brightnessMin.value/256) + brightnessMin.value/256)*(1<<8))|0).toString(16)).slice(-2);
+      }*/
+
+      function genColor() {
+        //return "#" + genColorThird() + genColorThird() + genColorThird();
+        //const startTime = performance.now();
+        let col = [0, 0, 0];
+        while (Math.sqrt(0.299*Math.pow(col[0], 2) + 0.587*Math.pow(col[1], 2) + 0.114*Math.pow(col[2], 2)) < brightnessMin.value) {
+          for (let i = 0; i < 3; i++) {
+            col[i] = Math.random()*(1<<8);
+          }
+        }
+        for (let i = 0; i < 3; i++) {
+          col[i] = ("0"+(col[i]|0).toString(16)).slice(-2);
+        }
+        //console.log(Math.round((performance.now() - startTime ) * 100) / 100+ "ms");
+        console.log("#" + col[0] + col[1] + col[2]);
+        return "#" + col[0] + col[1] + col[2];
+      }
+
+      function createSpark(x, y, col, siz, dist) {
+        const spark = document.createElement("div");
+        spark.classList.add("spark");
+        if (randColor.value === "spark") {
+          spark.style.backgroundColor = genColor();
+        } else if (randColor.value === "firework") {
+          spark.style.backgroundColor = col;
+        } else {
+          spark.style.backgroundColor = color.value;
+        }
+        const fallRand = Math.random();
+        if (randSize.value === "spark") {
+          siz = (sizeGrav.checked ? fallRand : Math.random()) * (sizeMax.value - sizeMin.value) + parseInt(sizeMin.value);
+          spark.style.height = siz + "px";
+          spark.style.width = siz + "px";
+        } else {
+          spark.style.height = siz + "px";
+          spark.style.width = siz + "px";
+        }
+        spark.style.top = y - siz / 2 + "px";
+        spark.style.left = x - siz / 2 + "px";
+        const dir = Math.random() * 2 * Math.PI;
+        const rand = dist * random(sparkDistMin.value, sparkDistMax.value);
+        spark.style.setProperty("--vertical", rand * Math.sin(dir) + "px");
+        spark.style.setProperty("--horizontal", rand * Math.cos(dir) + "px");
+        spark.style.setProperty("--fadeDelay", random(fadeMin.value, fadeMax.value) + "ms");
+        spark.style.setProperty("--fadeDur", fadeDur.value + "ms");
+        spark.style.setProperty("--fall", fallRand * (gravityMax.value - gravityMin.value) + parseInt(gravityMin.value) + "px");
+        spark.style.setProperty("--time", parseInt(fadeMax.value) + parseInt(fadeDur.value) + "ms");
+        main.append(spark);
+        setTimeout(function() {
+          spark.remove();
+        }, parseInt(fadeMax.value) + parseInt(fadeDur.value));
+        /*setTimeout(function () {
+          spark.classList.add("start");
+        });*/
+        return spark;
+      }
+
+      function createFirework(x, y) {
+        //const startTime = performance.now();
+        const sparks = random(sparksMin.value, sparksMax.value);
+        const col = genColor();//"#"+("00000"+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
+        const siz = random(sizeMin.value, sizeMax.value);
+        const dist = random(fireworkDistMin.value, fireworkDistMax.value);
+        let sparkList = [];
+        for (let i = 0; i < sparks; i++) {
+          sparkList.push(createSpark(x, y, col, siz, dist));
+        }
+        setTimeout(function () {
+          for (let i = 0; i < sparks; i++) {
+            sparkList[i].classList.add("start");
+          }
+        });
+        
+        //console.log(Math.round((performance.now() - startTime ) * 100) / 100+ "ms");
+      }
+
+      function randFirework() {
+        createFirework(Math.random() * main.offsetWidth, Math.random() * main.offsetHeight);
+      }
+
+
+
+      /* Listeners */
+
+      main.addEventListener("click", function(e) {
+        createFirework(e.offsetX, e.offsetY);
+      });
+
+      fullscreen.addEventListener("click", function() {
+        footer.style.display = "none";
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          footer.style.display = "block";
+        }
+      });
+
+      share.addEventListener("click", function() {
+        const url = window.location.href;
+        if (navigator.share) {
+          navigator.share({
+            title: "Fireworks",
+            url: url
+          }).catch(console.error);
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).catch(console.error);
+        } else {
+          alert(url);
+        }
+      });
+
+      auto.addEventListener("click", function() {
+        if (this.checked) {
+          delayMin.classList.remove("disabled");
+          delayMax.classList.remove("disabled");
+          randomInterval = setRandomInterval(randFirework, delayMin.value, delayMax.value);
+        } else {
+          delayMin.classList.add("disabled");
+          delayMax.classList.add("disabled");
+          randomInterval.clear();
+        }
+        updateParams();
+      });
+
+      delayMin.addEventListener("change", function() {
+        this.value = Math.max(0, Math.min(this.value, delayMax.value));
+        if (auto.checked) {
+          randomInterval.clear();
+          randomInterval = setRandomInterval(randFirework, delayMin.value, delayMax.value);
+        }
+        updateParams();
+      });
+
+      delayMax.addEventListener("change", function() {
+        this.value = Math.max(this.value, delayMin.value);
+        if (auto.checked) {
+          randomInterval.clear();
+          randomInterval = setRandomInterval(randFirework,  delayMin.value, delayMax.value);
+        }
+        updateParams();
+      });
+
+      randColor.addEventListener("change", function() {
+        if (this.value !== "chosen") {
+          color.classList.add("disabled");
+          brightnessMin.classList.remove("disabled");
+        } else {
+          color.classList.remove("disabled");
+          brightnessMin.classList.add("disabled");
+        }
+        updateParams();
+      });
+
+      color.addEventListener("change", function() {
+        updateParams();
+      });
+      
+      brightnessMin.addEventListener("change", function() {
+        this.value = Math.max(this.min, Math.min(this.value, this.max));
+        updateParams();
+      });
+
+      randSize.addEventListener("change", function() {
+        if (randSize.value == "firework") {
+          sizeGrav.classList.add("disabled");
+        } else {
+          sizeGrav.classList.remove("disabled");
+        }
+        updateParams();
+      });
+
+      sizeGrav.addEventListener("change", function() {
+        updateParams();
+      });
+
+      sizeMin.addEventListener("change", function() {
+        this.value = Math.max(0, Math.min(this.value, sizeMax.value));
+        updateParams();
+      });
+
+      sizeMax.addEventListener("change", function() {
+        this.value = Math.max(this.value, sizeMin.value);
+        updateParams();
+      });
+
+      sparkDistMin.addEventListener("change", function() {
+        this.value = Math.max(0, Math.min(this.value, sparkDistMax.value));
+        updateParams();
+      });
+
+      sparkDistMax.addEventListener("change", function() {
+        this.value = Math.max(this.value, sparkDistMin.value);
+        updateParams();
+      });
+
+      sparksMin.addEventListener("change", function() {
+        this.value = Math.max(0, Math.min(this.value, sparksMax.value));
+        updateParams();
+      });
+
+      sparksMax.addEventListener("change", function() {
+        this.value = Math.max(this.value, sparksMin.value);
+        updateParams();
+      });
+
+      fadeMin.addEventListener("change", function() {
+        this.value = Math.max(0, Math.min(this.value, fadeMax.value));
+        updateParams();
+      });
+
+      fadeMax.addEventListener("change", function() {
+        this.value = Math.max(this.value, fadeMin.value);
+        updateParams();
+      });
+
+      fadeDur.addEventListener("change", function() {
+        this.value = Math.max(0, this.value);
+        updateParams();
+      });
+
+      gravityMin.addEventListener("change", function() {
+        this.value = Math.max(0, Math.min(this.value, gravityMax.value));
+        updateParams();
+      });
+
+      gravityMax.addEventListener("change", function() {
+        this.value = Math.max(this.value, gravityMin.value);
+        updateParams();
+      });
+
+      reset.addEventListener("click", function() {
+        window.location = window.location.href.split("?")[0];
+      });
+    </script>
+  </body>
+</html>
