@@ -463,58 +463,21 @@
         updateParams();
       });
 
-      sizeMin.addEventListener("change", function() {
-        this.value = Math.max(0, Math.min(this.value, sizeMax.value));
-        updateParams();
-      });
-
-      sizeMax.addEventListener("change", function() {
-        this.value = Math.max(this.value, sizeMin.value);
-        updateParams();
-      });
-
-      sparkDistMin.addEventListener("change", function() {
-        this.value = Math.max(0, Math.min(this.value, sparkDistMax.value));
-        updateParams();
-      });
-
-      sparkDistMax.addEventListener("change", function() {
-        this.value = Math.max(this.value, sparkDistMin.value);
-        updateParams();
-      });
-
-      sparksMin.addEventListener("change", function() {
-        this.value = Math.max(0, Math.min(this.value, sparksMax.value));
-        updateParams();
-      });
-
-      sparksMax.addEventListener("change", function() {
-        this.value = Math.max(this.value, sparksMin.value);
-        updateParams();
-      });
-
-      fadeMin.addEventListener("change", function() {
-        this.value = Math.max(0, Math.min(this.value, fadeMax.value));
-        updateParams();
-      });
-
-      fadeMax.addEventListener("change", function() {
-        this.value = Math.max(this.value, fadeMin.value);
-        updateParams();
-      });
+      //Min and max value calculations for number inputs
+      const minMaxes = [[sizeMin, sizeMax], [sparkDistMin, sparkDistMax], [fireworkDistMin, fireworkDistMax], [sparksMin, sparksMax], [fadeMin, fadeMax], [gravityMin, gravityMax]];
+      for (let i = 0; i < minMaxes.length; i++) {
+        minMaxes[i][0].addEventListener("change", function() {
+          this.value = Math.max(0, Math.min(this.value, minMaxes[i][1].value));
+          updateParams();
+        });
+        minMaxes[i][1].addEventListener("change", function() {
+          this.value = Math.max(this.value, minMaxes[i][0].value);
+          updateParams();
+        });
+      }
 
       fadeDur.addEventListener("change", function() {
         this.value = Math.max(0, this.value);
-        updateParams();
-      });
-
-      gravityMin.addEventListener("change", function() {
-        this.value = Math.max(0, Math.min(this.value, gravityMax.value));
-        updateParams();
-      });
-
-      gravityMax.addEventListener("change", function() {
-        this.value = Math.max(this.value, gravityMin.value);
         updateParams();
       });
 
