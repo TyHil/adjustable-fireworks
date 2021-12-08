@@ -78,66 +78,68 @@
   <body>
     <main></main>
     <footer>
-      <button id="fullscreen">Fullscreen</button>
-      <button id="share">Share</button>
+      <button id="fullscreen" title="Hide the settings panel. Press escape to exit">Fullscreen</button>
+      <button id="share" title="Share the unique link to your settings configuration">Share</button>
       <form>
-        <input type="checkbox" id="auto" name="auto" checked>
-        <label for="auto">Auto</label><br>
-        <p>Delay</p>
-        <input type="number" id="delayMin" name="delayMin" value="200">
-        <label for="delayMin" class="indent">Min</label><br>
-        <input type="number" id="delayMax" name="delayMax" value="1000">
-        <label for="delayMax" class="indent">Max</label><br>
-        <select id="randColor" name="randColor">
-          <option value="spark">Spark</option>
-          <option value="firework" selected>Firework</option>
-          <option value="chosen">Chosen</option>
+        <input type="checkbox" id="auto" name="auto" checked title="Automatically shoot off fireworks">
+        <label for="auto" title="Automatically shoot off fireworks">Auto</label><br>
+        <p title="Randomized delay between fireworks when Auto is on">Auto Delay</p>
+        <input type="number" id="delayMin" name="delayMin" value="200" title="Minimum delay between fireworks when Auto is on">
+        <label for="delayMin" class="indent" title="Minimum delay between fireworks when Auto is on">Min</label><br>
+        <input type="number" id="delayMax" name="delayMax" value="1000" title="Maximum delay between fireworks when Auto is on">
+        <label for="delayMax" class="indent" title="Maximum delay between fireworks when Auto is on">Max</label><br>
+        <input type="checkbox" id="pause" name="pause" title="Pause exploding fireworks">
+        <label for="pause" title="Pause exploding fireworks">Pause</label><br>
+        <select id="randColor" name="randColor" title="Method of generating firework colors">
+          <option value="spark" title="Each spark is a new random color">Spark</option>
+          <option value="firework" selected title="Each firework is a new random color">Firework</option>
+          <option value="chosen" title="Each spark is the same chosen color">Chosen</option>
         </select>
-        <label for="randColor">Color Mode</label><br>
-        <input type="color" id="color" name="color" value="#ff0000" class="disabled indent">
-        <label for="color">Color</label><br>
-        <input type="number" id="brightnessMin" name="brightnessMin" value="100" min="1" max="250" placeholder="0 to 255">
-        <label for="brightnessMin" class="indent">Min Brightness</label><br>
-        <select id="randSize" name="randSize">
-          <option value="spark" selected>Spark</option>
-          <option value="firework">Firework</option>
+        <label for="randColor" title="Method of generating firework colors">Color Mode</label><br>
+        <input type="color" id="color" name="color" value="#ff0000" class="disabled indent" title="Color to use for all fireworks if Color Mode is set to Chosen">
+        <label for="color" title="Color to use for all fireworks if Color Mode is set to Chosen">Color</label><br>
+        <input type="number" id="brightnessMin" name="brightnessMin" value="100" min="1" max="250" placeholder="0 to 255" title="Minimum brightness for generated colors if Color Mode is set to Spark or Firework">
+        <label for="brightnessMin" class="indent" title="Minimum brightness for generated colors if Color Mode is set to Spark or Firework">Min Brightness</label><br>
+        <select id="randSize" name="randSize" title="Method of generating spark sizes">
+          <option value="spark" selected title="Each spark is a new random size">Spark</option>
+          <option value="firework" title="Every spark in a firework is the same random size">Firework</option>
         </select>
-        <label for="randSize">Size</label><br>
-        <input type="checkbox" id="sizeGrav" name="sizeGrav" class="indent" checked>
-        <label for="sizeGrav">Size to Gravity</label><br>
-        <input type="number" id="sizeMin" name="sizeMin" value="2">
-        <label for="sizeMin" class="indent">Min</label><br>
-        <input type="number" id="sizeMax" name="sizeMax" value="8">
-        <label for="sizeMax" class="indent">Max</label><br>
-        <p>Spark Distance</p>
-        <input type="number" id="sparkDistMin" name="sparkDistMin" value="0">
-        <label for="sparkDistMin" class="indent">Min</label><br>
-        <input type="number" id="sparkDistMax" name="sparkDistMax" value="100">
-        <label for="sparkDistMax" class="indent">Max</label><br>
-        <p>Firework Distance</p>
-        <input type="number" id="fireworkDistMin" name="fireworkDistMin" value="1">
-        <label for="fireworkDistMin" class="indent">Min</label><br>
-        <input type="number" id="fireworkDistMax" name="fireworkDistMax" value="4">
-        <label for="fireworkDistMax" class="indent">Max</label><br>
-        <p>Sparks</p>
-        <input type="number" id="sparksMin" name="sparksMin" value="40">
-        <label for="sparksMin" class="indent">Min</label><br>
-        <input type="number" id="sparksMax" name="sparksMax" value="80">
-        <label for="sparksMax" class="indent">Max</label><br>
-        <p>Fade</p>
-        <input type="number" id="fadeMin" name="fadeMin" value="1000">
-        <label for="fadeMin" class="indent">Min</label><br>
-        <input type="number" id="fadeMax" name="fadeMax" value="2000">
-        <label for="fadeMax" class="indent">Max</label><br>
-        <input type="number" id="fadeDur" name="fadeDur" value="2000">
-        <label for="fadeDur" class="indent">Duration</label><br>
-        <p>Gravity</p>
-        <input type="number" id="gravityMin" name="gravityMin" value="100">
-        <label for="gravityMin" class="indent">Min</label><br>
-        <input type="number" id="gravityMax" name="gravityMax" value="200">
-        <label for="gravityMax" class="indent">Max</label><br>
+        <label for="randSize" title="Method of generating spark sizes">Size</label><br>
+        <input type="checkbox" id="sizeGrav" name="sizeGrav" class="indent" checked title="Closer sparks will fall faster">
+        <label for="sizeGrav" title="Closer sparks will fall faster">Size to Gravity</label><br>
+        <input type="number" id="sizeMin" name="sizeMin" value="2" title="Minimun spark size">
+        <label for="sizeMin" class="indent" title="Minimun spark size">Min</label><br>
+        <input type="number" id="sizeMax" name="sizeMax" value="8" title="Maximun spark size">
+        <label for="sizeMax" class="indent" title="Maximun spark size">Max</label><br>
+        <p title="Distance sparks fly from the center of their firework (radius)">Spark Distance</p>
+        <input type="number" id="sparkDistMin" name="sparkDistMin" value="0" title="Minimum distance sparks fly from the center of their firework (radius)">
+        <label for="sparkDistMin" class="indent" title="Minimum distance sparks fly from the center of their firework (radius)">Min</label><br>
+        <input type="number" id="sparkDistMax" name="sparkDistMax" value="100" title="Maximum distance sparks fly from the center of their firework (radius)">
+        <label for="sparkDistMax" class="indent" title="Minimum distance sparks fly from the center of their firework (radius)">Max</label><br>
+        <p title="Multiplier for the distance sparks fly from the center of their firework (radius)">Firework Distance</p>
+        <input type="number" id="fireworkDistMin" name="fireworkDistMin" value="1" title="Minimun multiplier for the distance sparks fly from the center of their firework (radius)">
+        <label for="fireworkDistMin" class="indent" title="Minimun multiplier for the distance sparks fly from the center of their firework (radius)">Min</label><br>
+        <input type="number" id="fireworkDistMax" name="fireworkDistMax" value="4" title="Maximun multiplier for the distance sparks fly from the center of their firework (radius)">
+        <label for="fireworkDistMax" class="indent" title="Maximun multiplier for the distance sparks fly from the center of their firework (radius)">Max</label><br>
+        <p title="Number of sparks in a firework">Sparks</p>
+        <input type="number" id="sparksMin" name="sparksMin" value="40" title="Minimun number of sparks in a firework">
+        <label for="sparksMin" class="indent" title="Minimun number of sparks in a firework">Min</label><br>
+        <input type="number" id="sparksMax" name="sparksMax" value="80" title="Maximun number of sparks in a firework">
+        <label for="sparksMax" class="indent" title="Maximun number of sparks in a firework">Max</label><br>
+        <p title="Calculations for spark fade timing">Fade</p>
+        <input type="number" id="fadeMin" name="fadeMin" value="1000" title="Minimum fade time start">
+        <label for="fadeMin" class="indent" title="Minimum fade time start">Min</label><br>
+        <input type="number" id="fadeMax" name="fadeMax" value="2000" title="Maximum fade time start">
+        <label for="fadeMax" class="indent" title="Maximum fade time start">Max</label><br>
+        <input type="number" id="fadeDur" name="fadeDur" value="2000" title="Duration of fade">
+        <label for="fadeDur" class="indent" title="Duration of fade">Duration</label><br>
+        <p title="Rate at which gravty accelerates sparks downwards">Gravity</p>
+        <input type="number" id="gravityMin" name="gravityMin" value="100" title="Minimum rate at which gravty accelerates sparks downwards">
+        <label for="gravityMin" class="indent" title="Minimum rate at which gravty accelerates sparks downwards">Min</label><br>
+        <input type="number" id="gravityMax" name="gravityMax" value="200" title="Maximum rate at which gravty accelerates sparks downwards">
+        <label for="gravityMax" class="indent" title="Maximum rate at which gravty accelerates sparks downwards">Max</label><br>
       </form>
-      <button id="reset">Reset</button>
+      <button id="reset" title="Reset all settings to default">Reset</button>
     </footer>
     <script>
 
@@ -151,6 +153,7 @@
       let randomInterval;
       const delayMin = document.getElementById("delayMin");
       const delayMax = document.getElementById("delayMax");
+      const pause = document.getElementById("pause");
       const randColor = document.getElementById("randColor");
       const brightnessMin = document.getElementById("brightnessMin");
       const color = document.getElementById("color");
@@ -230,6 +233,7 @@
             delayMin.classList.remove("disabled");
             delayMax.classList.remove("disabled");
           }
+          pause.checked = params.has("pause");
           if (params.get("randColor") === "chosen") {
             color.classList.remove("disabled");
             brightnessMin.classList.add("disabled");
@@ -276,13 +280,7 @@
 
       /* Firework Functions */
 
-      /*function genColorThird() {
-        return ("0"+(((Math.random()*(1 - brightnessMin.value/256) + brightnessMin.value/256)*(1<<8))|0).toString(16)).slice(-2);
-      }*/
-
       function genColor() {
-        //return "#" + genColorThird() + genColorThird() + genColorThird();
-        //const startTime = performance.now();
         let col = [0, 0, 0];
         while (Math.sqrt(0.299*Math.pow(col[0], 2) + 0.587*Math.pow(col[1], 2) + 0.114*Math.pow(col[2], 2)) < brightnessMin.value) {
           for (let i = 0; i < 3; i++) {
@@ -292,8 +290,6 @@
         for (let i = 0; i < 3; i++) {
           col[i] = ("0"+(col[i]|0).toString(16)).slice(-2);
         }
-        //console.log(Math.round((performance.now() - startTime ) * 100) / 100+ "ms");
-        console.log("#" + col[0] + col[1] + col[2]);
         return "#" + col[0] + col[1] + col[2];
       }
 
@@ -327,32 +323,30 @@
         spark.style.setProperty("--fall", fallRand * (gravityMax.value - gravityMin.value) + parseInt(gravityMin.value) + "px");
         spark.style.setProperty("--time", parseInt(fadeMax.value) + parseInt(fadeDur.value) + "ms");
         main.append(spark);
-        setTimeout(function() {
-          spark.remove();
-        }, parseInt(fadeMax.value) + parseInt(fadeDur.value));
-        /*setTimeout(function () {
-          spark.classList.add("start");
-        });*/
+        if (!pause.checked) {
+          setTimeout(function() {
+            spark.remove();
+          }, parseInt(fadeMax.value) + parseInt(fadeDur.value));
+        }
         return spark;
       }
 
       function createFirework(x, y) {
-        //const startTime = performance.now();
         const sparks = random(sparksMin.value, sparksMax.value);
-        const col = genColor();//"#"+("00000"+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
+        const col = genColor();//Random color (no min): "#"+("00000"+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
         const siz = random(sizeMin.value, sizeMax.value);
         const dist = random(fireworkDistMin.value, fireworkDistMax.value);
         let sparkList = [];
         for (let i = 0; i < sparks; i++) {
           sparkList.push(createSpark(x, y, col, siz, dist));
         }
-        setTimeout(function () {
-          for (let i = 0; i < sparks; i++) {
-            sparkList[i].classList.add("start");
-          }
-        });
-        
-        //console.log(Math.round((performance.now() - startTime ) * 100) / 100+ "ms");
+        if (!pause.checked) {
+          setTimeout(function () {
+            for (let i = 0; i < sparks; i++) {
+              sparkList[i].classList.add("start");
+            }
+          });
+        }        
       }
 
       function randFirework() {
@@ -418,6 +412,20 @@
         if (auto.checked) {
           randomInterval.clear();
           randomInterval = setRandomInterval(randFirework,  delayMin.value, delayMax.value);
+        }
+        updateParams();
+      });
+      
+      pause.addEventListener("click", function() {
+        if (!this.checked) {
+          const sparkList = document.getElementsByClassName("spark");
+          for (let i = 0; i < sparkList.length; i++) {
+            const spark = sparkList[i];
+            spark.classList.add("start");
+            setTimeout(function() {
+              spark.remove();
+            }, parseInt(fadeMax.value) + parseInt(fadeDur.value));
+          }
         }
         updateParams();
       });
